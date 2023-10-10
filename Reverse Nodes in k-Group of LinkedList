@@ -1,0 +1,49 @@
+class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode(int val) {
+        this.val = val;
+    }
+}
+
+public class ReverseKGroup {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        // Check if there are at least k nodes
+        if (head == null || k == 1) {
+            return head;
+        }
+
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode current = dummy;
+        ListNode nextGroupStart = dummy;
+
+        int count = 0;
+        while (head != null) {
+            count++;
+            if (count % k == 0) {
+                nextGroupStart = reverse(current, nextGroupStart, head.next);
+                head = current.next;
+            } else {
+                head = head.next;
+            }
+        }
+
+        return dummy.next;
+    }
+
+    private ListNode reverse(ListNode start, ListNode before, ListNode after) {
+        ListNode prev = start.next;
+        ListNode curr = prev.next;
+
+        while (curr != after) {
+            prev.next = curr.next;
+            curr.next = before.next;
+            before.next = curr;
+            curr = prev.next;
+        }
+
+        return prev;
+    }
+}
